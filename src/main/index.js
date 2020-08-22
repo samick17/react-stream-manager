@@ -1,1 +1,1 @@
-export {default as StreamManager} from './StreamManager';
+export { default as StreamManager } from './StreamManager';
