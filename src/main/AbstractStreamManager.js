@@ -18,11 +18,13 @@ class AbstractStreamManager {
 		return !!this.subStreams[controlId];
 	}
 
-	async start(controlId) {
+	async start(controlId, args) {
 		if(controlId in this.subStreams) return;
 		try {
 			this.subStreams[controlId] = 'pending';
-			const {fn, args} = this.startFns[controlId];
+			const params = this.startFns[controlId];
+			const fn = params.fn;
+			args = args || params.args;
 			const stream = await fn.apply(null, [args]);
 			this.subStreams[controlId] = stream;
 		} catch(err) {
