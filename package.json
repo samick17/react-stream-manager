@@ -1,0 +1,63 @@
+{
+  "name": "react-stream-manager",
+  "version": "1.0.0",
+  "description": "The StreamManager for React Web Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env CI=1 react-scripts test --env=jsdom --passWithNoTests",
+    "test:watch": "react-scripts test --env=jsdom --passWithNoTests",
+    "build": "sh ./build.sh",
+    "build:main": "rollup -c rollup-configs/Main.rollup.config.js",
+    "start": "rollup -c -w",
+    "prepare": "yarn run build",
+    "predeploy": "cd example && yarn install && yarn run build",
+    "deploy": "gh-pages -d example/build",
+    "prepublishOnly": "cp -r ./dist/* . && rm -rf ./dist",
+    "postpublish": "git clean -fd",
+    "gendoc": "node scripts/md-generator.js"
+  },
+  "author": "samick17",
+  "license": "MIT",
+  "repository": "samick17/react-app-patterns",
+  "keywords": [
+    "React",
+    "ReactJS"
+  ],
+  "module": "index.es.js",
+  "jsnext:main": "index.es.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "^16.13.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-react": "^7.9.4",
+    "@rollup/plugin-commonjs": "^11.1.0",
+    "@rollup/plugin-node-resolve": "^7.1.3",
+    "@rollup/plugin-url": "^4.0.2",
+    "@svgr/rollup": "^5.3.1",
+    "babel-eslint": "^10.1.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-config-standard-react": "^9.2.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "gh-pages": "^2.2.0",
+    "js-mdg": "^1.0.1",
+    "react-scripts": "^3.4.1",
+    "rollup": "^2.6.1",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-peer-deps-external": "^2.2.2",
+    "rollup-plugin-postcss": "^2.6.4"
+  }
+}
