@@ -22,7 +22,7 @@ class StreamManager {
 		return !!this.subStreams[this.streamKeys.camera];
 	}
 
-	get isMicEnabled() {
+	get isMicrophoneEnabled() {
 		return !!this.subStreams[this.streamKeys.microphone];
 	}
 

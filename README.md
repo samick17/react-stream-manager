@@ -19,7 +19,43 @@ npm install --save react-stream-manager
 
 ## Import specified module
 
+```js
 import { StreamManager } from 'react-stream-manager';
+```
+
+## Examples
+
+```js
+import { StreamManager } from 'react-stream-manager';
+
+const streamManager = new StreamManager({
+	streamKeys: {
+		display: 'd',
+		camera: 'c',
+		microphone: 'm'
+	},
+	startFns: {
+		display: {
+			fn: async () => {
+				// TODO get the display media stream
+			},
+			args: [],
+		},
+		camera: {
+			fn: async () => {
+				// TODO get the camera media stream
+			},
+			args: [],
+		},
+		microphone: {
+			fn: async () => {
+				// TODO get the microphone stream
+			},
+			args: [],
+		}
+	}
+});
+```
 
 ## Docs
 
