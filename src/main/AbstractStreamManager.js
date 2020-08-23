@@ -12,14 +12,19 @@ class AbstractStreamManager {
 		this.subStreams = {};
 		this.streamKeys = data.streamKeys || {};
 		this.startFns = data.startFns || {};
+		this.cleanupBeforeStart = data.cleanupBeforeStart || false;
+		this.cleanupAfterStop = data.cleanupAfterStop || false;
 	}
 
-	isEnabled(controlId) {
+	isAvailable(controlId) {
 		return !!this.subStreams[controlId];
 	}
 
 	async start(controlId, args) {
 		if(controlId in this.subStreams) return;
+		if(this.cleanupBeforeStart) {
+			this.cleanup();
+		}
 		try {
 			this.subStreams[controlId] = 'pending';
 			const params = this.startFns[controlId];
@@ -35,13 +40,80 @@ class AbstractStreamManager {
 
 	stop(controlId) {
 		if(controlId in this.subStreams) {
-			const activeStream = this.subStreams[controlId];
-			activeStream.getTracks().forEach(track => {
-				track.stop();
-				activeStream.removeTrack(track);
-			});
-			delete this.subStreams[controlId];
-			this.cleanup();
+			try {
+				const activeStream = this.subStreams[controlId];
+				activeStream.getTracks().forEach(track => {
+					track.stop();
+					activeStream.removeTrack(track);
+				});
+				delete this.subStreams[controlId];
+			} catch(err) {
+				if(this.cleanupAfterStop) {
+					this.cleanup();
+				}
+			}
+		}
+	}
+
+	enable(controlId) {
+		if(controlId in this.subStreams) {
+			try {
+				const activeStream = this.subStreams[controlId];
+				activeStream.getTracks().forEach(track => {
+					track.enabled = true;
+				});
+			} catch(err) {
+				console.log(err);
+			}
+		}
+	}
+
+	isEnabled(controlId) {
+		if(controlId in this.subStreams) {
+			try {
+				const activeStream = this.subStreams[controlId];
+				let isAllEnabled = true;
+				activeStream.getTracks().forEach(track => {
+					isAllEnabled &= track.enabled;
+				});
+				return isAllEnabled;
+			} catch(err) {
+				console.log(err);
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	disable(controlId) {
+		if(controlId in this.subStreams) {
+			try {
+				const activeStream = this.subStreams[controlId];
+				activeStream.getTracks().forEach(track => {
+					track.enabled = false;
+				});
+			} catch(err) {
+				console.log(err);
+			}
+		}
+	}
+
+	isDisabled(controlId) {
+		if(controlId in this.subStreams) {
+			try {
+				const activeStream = this.subStreams[controlId];
+				let isAllDisabled = true;
+				activeStream.getTracks().forEach(track => {
+					isAllDisabled &= !track.enabled;
+				});
+				return isAllDisabled;
+			} catch(err) {
+				console.log(err);
+				return false;
+			}
+		} else {
+			return false;
 		}
 	}
 

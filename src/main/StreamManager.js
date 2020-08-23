@@ -2,16 +2,16 @@ import AbstractStreamManager from './AbstractStreamManager';
 
 class StreamManager extends AbstractStreamManager {
 
-	get isDisplayEnabled() {
-		return this.isEnabled(this.streamKeys.display);
+	get isDisplayAvailable() {
+		return this.isAvailable(this.streamKeys.display);
 	}
 
-	get isCameraEnabled() {
-		return this.isEnabled(this.streamKeys.camera);
+	get isCameraAvailable() {
+		return this.isAvailable(this.streamKeys.camera);
 	}
 
-	get isMicrophoneEnabled() {
-		return this.isEnabled(this.streamKeys.microphone);
+	get isMicrophoneAvailable() {
+		return this.isAvailable(this.streamKeys.microphone);
 	}
 
 }

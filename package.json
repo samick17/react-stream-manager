@@ -1,6 +1,6 @@
 {
   "name": "react-stream-manager",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "The StreamManager for React Web Application",
   "main": "index.js",
   "scripts": {
