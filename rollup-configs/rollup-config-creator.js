@@ -21,6 +21,12 @@ export default {
         file: `dist/${outputName}.es.js`,
         format: 'es',
         sourcemap: false
+      },
+      {
+        name: 'stream',
+        file: `dist/${outputName}.min.js`,
+        format: 'iife',
+        sourcemap: false
       }
       ],
       plugins: [

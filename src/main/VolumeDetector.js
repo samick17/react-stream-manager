@@ -53,6 +53,36 @@ class VolumeDetector extends EventModel {
     } else {
       this.trigger(Events.Ignore, [average]);
     }
+    this.trigger(Events.Process, [array]);
+  }
+
+  async startFromArrayBuffer(arrayBuffer) {
+    if(this.isStart) return;
+    if(this.stream && this.stream.getAudioTracks().length === 0) return;
+    this.isStart = true;
+    const volumeDetectorV2 = this;
+    // const micStream = await volumeDetectorV2.getMicStream();
+    const audioContext = volumeDetectorV2.audioContext = new AudioContext();
+    volumeDetectorV2.source = audioContext.createBufferSource();
+    // volumeDetectorV2.mediaStreamSource = volumeDetectorV2.audioContext.createMediaStreamSource(micStream);
+    volumeDetectorV2.analyser = audioContext.createAnalyser();
+    volumeDetectorV2.processor = audioContext.createScriptProcessor(2048, 1, 1);
+    volumeDetectorV2.analyser.smoothingTimeConstant = 0.8;
+    volumeDetectorV2.analyser.fftSize = 1024;
+    volumeDetectorV2.source.connect(audioContext.destination);
+    volumeDetectorV2.source.connect(volumeDetectorV2.analyser);
+    // volumeDetectorV2.mediaStreamSource.connect(volumeDetectorV2.analyser);
+    volumeDetectorV2.analyser.connect(volumeDetectorV2.processor);
+    volumeDetectorV2.processor.connect(audioContext.destination);
+    volumeDetectorV2.processor.onaudioprocess = function(e) {
+      volumeDetectorV2.volumeAudioProcess(e);
+    };
+    audioContext.decodeAudioData(arrayBuffer, (buffer) => {
+      volumeDetectorV2.source.buffer = buffer;
+      volumeDetectorV2.source.start(0);
+      volumeDetectorV2.source.loop = true;
+    });
+    this.trigger(Events.Start);
   }
 
   async start() {
@@ -87,6 +117,10 @@ class VolumeDetector extends EventModel {
     } catch(err) {
       console.log(err);
     } finally {
+      if(this.source) {
+        this.source.stop();
+        delete this.source;
+      }
       this.trigger(Events.Stop);
     }
   }

@@ -7,4 +7,5 @@ export default EventUtils.createEventTypes([
   'StreamChanged',
   'Start',
   'Stop',
+  'Process',
 ]);
