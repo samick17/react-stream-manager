@@ -16,6 +16,15 @@ window.onload = () => {
 		});
 	}
 	const volDetector = new stream.VolumeDetector();
+	const streamManager = new stream.StreamManager();
+	streamManager.setStartFunctions({
+		mic: {
+			fn: () => {
+				return stream.MediaDevice.getStream({audio: true});
+			}
+		},
+	});
+
 	let unbindVolDetectorEvents;
 
 	function createVisualizer() {
@@ -63,6 +72,16 @@ window.onload = () => {
 	}
 	const visualizer = createVisualizer();
 
+	function playStreamAuto(mediaStream) {
+		const video = document.createElement('video');
+		video.setAttribute('controls', '');
+		video.srcObject = mediaStream;
+		video.onloadmetadata = () => {
+			video.play();
+		};
+		document.body.append(video);
+	}
+
 	button.addEventListener('click', async () => {
 		if(unbindVolDetectorEvents) {
 			unbindVolDetectorEvents();
@@ -74,6 +93,16 @@ window.onload = () => {
 			visualizer.stop();
 		} else {
 			button.innerText = 'Stop';
+			/* Detect from Microphone */
+			// await streamManager.start('mic');
+			// const mediaStream = streamManager.composeAs(['mic'], 'micLive');
+			// console.log(mediaStream);
+			// playStreamAuto(mediaStream);
+
+			// volDetector.setStream(mediaStream);
+			// volDetector.start();
+
+			/* Detect from buffer source */
 			const arrayBuffer = await reqArrayBuffer(audioSrc);
 			volDetector.startFromArrayBuffer(arrayBuffer);
 			unbindVolDetectorEvents = volDetector.on({

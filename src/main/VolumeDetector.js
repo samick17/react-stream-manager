@@ -110,9 +110,9 @@ class VolumeDetector extends EventModel {
     if(!this.isStart) return;
     this.isStart = false;
     try {
-      this.mediaStreamSource.disconnect(this.analyser);
-      this.analyser.disconnect(this.processor);
-      this.processor.disconnect(this.audioContext.destination);
+      if(this.mediaStreamSource) this.mediaStreamSource.disconnect(this.analyser);
+      if(this.analyser) this.analyser.disconnect(this.processor);
+      if(this.processor) this.processor.disconnect(this.audioContext.destination);
       this.clearAudioContext();
     } catch(err) {
       console.log(err);
