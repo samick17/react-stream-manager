@@ -1,6 +1,6 @@
 {
   "name": "react-stream-manager",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "The StreamManager for React Web Application",
   "main": "index.js",
   "scripts": {
@@ -30,10 +30,7 @@
     "npm": ">=5"
   },
   "dependencies": {
-    "react-event-base": "^1.1.31"
-  },
-  "peerDependencies": {
-    "react": "^16.13.1"
+    "react-event-base": "^1.1.70"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
